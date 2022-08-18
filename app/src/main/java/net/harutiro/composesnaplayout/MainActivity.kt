@@ -4,14 +4,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.chrisbanes.snapper.ExperimentalSnapperApi
+import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import net.harutiro.composesnaplayout.ui.theme.ComposeSnapLayoutTheme
 
 class MainActivity : ComponentActivity() {
@@ -31,7 +35,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSnapperApi::class)
 @Composable
 fun MainContent(
     placeholderItems: MutableList<String>
@@ -50,8 +54,12 @@ fun MainContent(
             text = "Example Horizontal LazyRow"
         )
 
+        val lazyListState: LazyListState = rememberLazyListState()
+
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
+            state = lazyListState,
+            flingBehavior = rememberSnapperFlingBehavior(lazyListState),
             contentPadding = PaddingValues(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
